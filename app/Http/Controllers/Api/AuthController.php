@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends \App\Http\Controllers\Controller
 {
     public function login(Request $request)
     {
-        if ($token = JWTAuth::attempt(['email' => $request->email, 'password'   =>  $request->password])) {
-            // dd(Auth::user());
+        if ($token  =  JWTAuth::attempt(['email'  =>  $request->email, 'password'  =>  $request->password])) {
 
-            return response()->json(['token' => $token], 200);
+            $user  =  Auth::user();
+            $user['token']  =  $token;
+
+            return response()->json($user, 200);
         }
 
 
@@ -38,6 +40,7 @@ class AuthController extends \App\Http\Controllers\Controller
 
     public function auth()
     {
+        // dd("adsds");
         return  response()->json(Auth::user());
     }
 }

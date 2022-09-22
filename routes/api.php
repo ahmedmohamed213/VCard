@@ -26,7 +26,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
 });
 
-Route::group(['middelware' => 'api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('auth', [AuthController::class, 'auth']);
     Route::post('store', [profileController::class, 'store']);
     Route::resource('index', profileController::class);
 });
